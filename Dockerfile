@@ -1,18 +1,27 @@
-FROM node:18-alpine as builder
+# Use the official Node.js 18.18-alpine image as a base
+FROM node:18.18-alpine
+
+# Set environment variables
+ENV NODE_ENV=production
+
+# Set the working directory inside the container
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci
+# Copy the entire project directory into the container
 COPY . .
-RUN npm run build
 
-FROM node:18-alpine as runner
-WORKDIR /app
-COPY --from=builder /app/package.json .
-COPY --from=builder /app/package-lock.json .
-COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-EXPOSE 3000
-ENTRYPOINT ["npm", "start"]
+# If node_modules already exists, remove it
+RUN rm -rf node_modules
+
+# Install dependencies
+RUN yarn install --frozen-lockfile
+
+# Copy the built files to the container
+COPY .next ./.next
+COPY .storybook ./.storybook
+
+# Expose the ports Next.js runs on (usually 3000) and Storybook runs on (usually 6006)
+EXPOSE 3000 6006
+
+# Start both Next.js and Storybook
+CMD ["yarn", "start"]
