@@ -1,0 +1,17 @@
+@font-face {
+    font-family: 'Charmonman';
+    font-weight: 400;
+    src: url('../../public/fonts/charmonman/Charmonman-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'Charmonman';
+    font-weight: 700;
+    src: url('../../public/fonts/charmonman/Charmonman-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Sarabun';
+    font-weight: 400;
+    src: url('../../public/fonts/sarabun/Sarabun-Regular.ttf');
+}
